@@ -31,7 +31,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 #else
-# define readline(p) getline(p,stdin)
+# define readline(p) getline_internal(p,stdin)
 # define add_history(X)
 # define read_history(X)
 # define write_history(X)
@@ -72,7 +72,7 @@ static char continuePrompt[20]; /* Continuation prompt. default: "   ...> " */
 ** The interface is like "readline" but no command-line editing
 ** is done.
 */
-static char *getline(char *zPrompt, FILE *in){
+static char *getline_internal(char *zPrompt, FILE *in){
   char *zLine;
   int nLine;
   int n;
@@ -117,7 +117,7 @@ static char *getline(char *zPrompt, FILE *in){
 ** Retrieve a single line of input text.  "isatty" is true if text
 ** is coming from a terminal.  In that case, we issue a prompt and
 ** attempt to use "readline" for command-line editing.  If "isatty"
-** is false, use "getline" instead of "readline" and issue no prompt.
+** is false, use "getline_internal" instead of "readline" and issue no prompt.
 **
 ** zPrior is a string of prior text retrieved.  If not the empty
 ** string, then issue a continuation prompt.
@@ -126,7 +126,7 @@ static char *one_input_line(const char *zPrior, FILE *in){
   char *zPrompt;
   char *zResult;
   if( in!=0 ){
-    return getline(0, in);
+    return getline_internal(0, in);
   }
   if( zPrior && zPrior[0] ){
     zPrompt = continuePrompt;
