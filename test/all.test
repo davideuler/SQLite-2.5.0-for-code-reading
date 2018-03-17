@@ -1,0 +1,81 @@
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file runs all tests.
+#
+# $Id: all.test,v 1.14 2002/05/10 13:14:08 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+rename finish_test really_finish_test
+proc finish_test {} {memleak_check}
+
+if {[file exists ./sqlite_test_count]} {
+  set COUNT [exec cat ./sqlite_test_count]
+} else {
+  set COUNT 3
+}
+
+# LeakList will hold a list of the number of unfreed mallocs after
+# each round of the test.  This number should be constant.  If it
+# grows, it may mean there is a memory leak in the library.
+#
+set LeakList {}
+
+set EXCLUDE {
+  all.test
+  quick.test
+  malloc.test
+  misuse.test
+  btree2.test
+}
+
+for {set Counter 0} {$Counter<$COUNT && $nErr==0} {incr Counter} {
+  if {$Counter%2} {
+    set ::SETUP_SQL {PRAGMA default_synchronous=off;}
+  } else {
+    catch {unset ::SETUP_SQL}
+  }
+  foreach testfile [lsort -dictionary [glob $testdir/*.test]] {
+    set tail [file tail $testfile]
+    if {[lsearch -exact $EXCLUDE $tail]>=0} continue
+    source $testfile
+  }
+  if {[info exists Leak]} {
+    lappend LeakList $Leak
+  }
+}
+
+# Do one last test to look for a memory leak in the library.  This will
+# only work if SQLite is compiled with the -DMEMORY_DEBUG=1 flag.
+#
+if {$LeakList!=""} {
+  puts -nonewline memory-leak-test...
+  incr ::nTest
+  foreach x $LeakList {
+    if {$x!=[lindex $LeakList 0]} {
+       puts " failed!"
+       puts "Expected: all values to be the same"
+       puts "     Got: $LeakList"
+       incr ::nErr
+       lappend ::failList memory-leak-test
+       break
+    }
+  }
+  puts " Ok"
+}
+
+# Run the malloc tests and the misuse test after memory leak detection.
+# Both tests leak memory.
+#
+catch {source $testdir/misuse.test}
+catch {source $testdir/malloc.test}
+
+really_finish_test

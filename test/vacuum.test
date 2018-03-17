@@ -1,0 +1,22 @@
+# 2001 September 15
+#
+# The author disclaims copyright to this source code.  In place of
+# a legal notice, here is a blessing:
+#
+#    May you do good and not evil.
+#    May you find forgiveness for yourself and forgive others.
+#    May you share freely, never taking more than you give.
+#
+#***********************************************************************
+# This file implements regression tests for SQLite library.  The
+# focus of this file is testing the VACUUM statement.
+#
+# $Id: vacuum.test,v 1.7 2002/03/03 02:49:52 drh Exp $
+
+set testdir [file dirname $argv0]
+source $testdir/tester.tcl
+
+# The vacuum command no longer functions.  There is
+# nothing to test.
+
+# finish_test
