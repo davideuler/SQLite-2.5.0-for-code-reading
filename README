@@ -1,4 +1,19 @@
-This directory contains source code to 
+This project is forked from 2.5.0 SQLite, and fixed for modern C compilers like GCC.
+
+Earlier SQLite is perfect source for code reading, and for database design and implementation.
+For SQLite 2.5.0, it has a core code base less than 20000 LOC in ANSI C which is easy to understand.
+
+I digged into historical versions of SQLite, and fixed this version against GCC on MacOS 10.13.
+
+$sloccount SQLite-2.5.0-for-code-reading
+SLOC	Directory	SLOC-by-Language (Sorted)
+20914   src_top_dir     ansic=19895,yacc=584,tcl=435
+6831    top_dir         sh=6831
+6363    www             tcl=6363
+4051    tool            ansic=3606,tcl=372,awk=73
+156     test            tcl=156
+0       doc             (none)
+
 
     SQLite: An SQL Database Engine in a C Library
 
