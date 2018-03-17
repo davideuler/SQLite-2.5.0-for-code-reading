@@ -3,7 +3,7 @@ This project is forked from 2.5.0 SQLite, and fixed for modern C compilers like 
 Earlier SQLite is perfect source for code reading, and for database design and implementation.
 For SQLite 2.5.0, it has a core code base less than 20000 LOC in ANSI C which is easy to understand.
 
-I digged into historical versions of SQLite, and fixed this version against GCC on MacOS 10.13.
+I digged into historical versions of SQLite, and fixed this version against GCC on MacOS 10.13 and Debian 8.
 
 $sloccount SQLite-2.5.0-for-code-reading
 SLOC	Directory	SLOC-by-Language (Sorted)
